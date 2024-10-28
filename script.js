@@ -1,12 +1,17 @@
-//your JS code here. If required.
 let currentPlayer = 1;
 let board = ['', '', '', '', '', '', '', '', ''];
 let player1, player2;
 
 document.getElementById('submit').addEventListener('click', () => {
-    player1 = document.getElementById('player-1').value || 'Player 1';
-    player2 = document.getElementById('player-2').value || 'Player 2';
-    
+    player1 = document.getElementById('player1').value.trim();
+    player2 = document.getElementById('player2').value.trim();
+
+    // Check if both player names are entered
+    if (player1 === '' || player2 === '') {
+        alert('Please enter both player names.');
+        return;
+    }
+
     document.querySelector('.player-names').style.display = 'none';
     document.querySelector('.game').style.display = 'block';
     document.querySelector('.message').innerText = `${player1}, you're up!`;
@@ -37,7 +42,7 @@ function handleCellClick(index) {
 function checkWin() {
     const winPatterns = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
         [0, 4, 8], [2, 4, 6]            
     ];
 
