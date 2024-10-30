@@ -23,9 +23,9 @@ document.getElementById('submit').addEventListener('click', () => {
 });
 
 function handleCellClick(index) {
-    if (board[index] !== '') return;
+    if (board[index] !== '') return; 
 
-    board[index] = currentPlayer === 1 ? 'X' : 'O';
+    board[index] = currentPlayer === 1 ? 'X' : 'O'; // Use uppercase
     document.getElementById(index + 1).innerText = board[index];
 
     if (checkWin()) {
@@ -41,9 +41,9 @@ function handleCellClick(index) {
 
 function checkWin() {
     const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], 
         [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
+        [0, 4, 8], [2, 4, 6]            
     ];
 
     return winPatterns.some(pattern => {
