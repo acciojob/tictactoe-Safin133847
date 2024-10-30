@@ -2,12 +2,10 @@ let currentPlayer = 1; // Start with Player 1
 let board = ['', '', '', '', '', '', '', '', '']; // Game board
 let player1, player2;
 
-// Handle player name submission
 document.getElementById('submit').addEventListener('click', () => {
     player1 = document.getElementById('player1').value.trim();
     player2 = document.getElementById('player2').value.trim();
 
-    // Validate player names
     if (player1 === '' || player2 === '') {
         alert('Please enter both player names.');
         return;
@@ -24,12 +22,10 @@ document.getElementById('submit').addEventListener('click', () => {
     });
 });
 
-// Handle cell clicks
 function handleCellClick(index) {
     if (board[index] !== '') return; // Ignore if already filled
 
-    // Update board and display move
-    board[index] = currentPlayer === 1 ? 'X' : 'O'; // Use uppercase for consistency
+    board[index] = currentPlayer === 1 ? 'X' : 'O'; // X for Player 1, O for Player 2
     document.getElementById(index + 1).innerText = board[index];
 
     if (checkWin()) {
@@ -38,13 +34,11 @@ function handleCellClick(index) {
     } else if (board.every(cell => cell)) {
         document.querySelector('.message').innerText = "It's a draw!";
     } else {
-        // Switch players
         currentPlayer = currentPlayer === 1 ? 2 : 1;
         document.querySelector('.message').innerText = `${currentPlayer === 1 ? player1 : player2}, you're up!`;
     }
 }
 
-// Check for win conditions
 function checkWin() {
     const winPatterns = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], 
