@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
         player2Name = player2Input.value.trim();
 
         if (player1Name && player2Name) {
-            nameInputSection.style.display = "none";  // Hide name input section
-            gameBoard.style.display = "block";         // Show game board
-            message.textContent = `${player1Name}, you're up!`; // Set initial turn message
+            // Hide the name input section and show the game board
+            nameInputSection.style.display = "none";  
+            gameBoard.style.display = "block";       
+
+            // Initialize the message to Player 1's turn
+            message.textContent = `${player1Name}, you're up!`;
         } else {
             alert("Please enter names for both players.");
         }
@@ -31,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.addEventListener('click', () => {
             const cellId = parseInt(cell.id) - 1;
 
-            // If the cell is already filled or game is over, do nothing
+            // If the cell is already filled or the game is over, do nothing
             if (gameBoardState[cellId] !== null || message.textContent.includes("congratulations")) return;
 
             // Mark the cell for the current player
@@ -47,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentPlayer = 'player1';
             }
 
-            // Check for a winner
+            // Check for a winner after each move
             checkWinner();
         });
     });
