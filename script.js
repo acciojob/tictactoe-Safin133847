@@ -1,53 +1,71 @@
-let currentPlayer = 1; // Start with Player 1
-let board = ['', '', '', '', '', '', '', '', '']; // Game board
-let player1, player2;
+document.addEventListener("DOMContentLoaded", () => {
+    const submitButton = document.getElementById("submit");
+    const player1Input = document.getElementById("player-1");
+    const player2Input = document.getElementById("player-2");
+    const nameInputSection = document.getElementById("name-input-section");
+    const gameBoard = document.getElementById("game-board");
+    const message = document.querySelector(".message");
+    const cells = document.querySelectorAll(".cell");
 
-document.getElementById('submit').addEventListener('click', () => {
-    player1 = document.getElementById('player1').value.trim();
-    player2 = document.getElementById('player2').value.trim();
+    let player1Name = '';
+    let player2Name = '';
+    let currentPlayer = 'player1';
+    let gameBoardState = Array(9).fill(null);  // Array to store board state
 
-    if (player1 === '' || player2 === '') {
-        alert('Please enter both player names.');
-        return;
-    }
+    // Submit Button Click Event
+    submitButton.addEventListener('click', () => {
+        player1Name = player1Input.value.trim();
+        player2Name = player2Input.value.trim();
 
-    // Hide player input and show game board
-    document.querySelector('.player-names').style.display = 'none';
-    document.querySelector('.game').style.display = 'block';
-    document.querySelector('.message').innerText = `${player1}, you're up!`;
-
-    const cells = document.querySelectorAll('.cell');
-    cells.forEach((cell, index) => {
-        cell.addEventListener('click', () => handleCellClick(index));
+        if (player1Name && player2Name) {
+            nameInputSection.style.display = "none";  // Hide name input section
+            gameBoard.style.display = "block";         // Show game board
+            message.textContent = `${player1Name}, you're up!`;
+        } else {
+            alert("Please enter names for both players.");
+        }
     });
+
+    cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+            const cellId = parseInt(cell.id) - 1;
+
+            if (gameBoardState[cellId] !== null || message.textContent.includes("congratulations")) return;
+
+            if (currentPlayer === 'player1') {
+                cell.textContent = 'X';
+                gameBoardState[cellId] = 'X';
+                message.textContent = `${player2Name}, you're up!`;
+                currentPlayer = 'player2';
+            } else {
+                cell.textContent = 'O';
+                gameBoardState[cellId] = 'O';
+                message.textContent = `${player1Name}, you're up!`;
+                currentPlayer = 'player1';
+            }
+
+            checkWinner();
+        });
+    });
+
+    function checkWinner() {
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+            [0, 4, 8], [2, 4, 6]             
+        ];
+
+        for (let combination of winningCombinations) {
+            const [a, b, c] = combination;
+            if (gameBoardState[a] && gameBoardState[a] === gameBoardState[b] && gameBoardState[a] === gameBoardState[c]) {
+                const winner = gameBoardState[a] === 'X' ? player1Name : player2Name;
+                message.textContent = `${winner}, congratulations you won!`;
+                return;
+            }
+        }
+
+        if (!gameBoardState.includes(null)) {
+            message.textContent = "It's a draw!";
+        }
+    }
 });
-
-function handleCellClick(index) {
-    if (board[index] !== '') return; // Ignore if already filled
-
-    board[index] = currentPlayer === 1 ? 'X' : 'O'; // X for Player 1, O for Player 2
-    document.getElementById(index + 1).innerText = board[index];
-
-    if (checkWin()) {
-        document.querySelector('.message').innerText = `${currentPlayer === 1 ? player1 : player2}, congratulations you won!`;
-        document.querySelectorAll('.cell').forEach(cell => cell.style.pointerEvents = 'none'); // Disable further clicks
-    } else if (board.every(cell => cell)) {
-        document.querySelector('.message').innerText = "It's a draw!";
-    } else {
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
-        document.querySelector('.message').innerText = `${currentPlayer === 1 ? player1 : player2}, you're up!`;
-    }
-}
-
-function checkWin() {
-    const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]            
-    ];
-
-    return winPatterns.some(pattern => {
-        const [a, b, c] = pattern;
-        return board[a] && board[a] === board[b] && board[a] === board[c];
-    });
-}
