@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
             gameBoard.style.display = "block";       
 
             // Initialize the message to Player 1's turn
-            message.textContent = `${player1Name}, you're up!`;
+            setMessage(`${player1Name}, you're up!`);
         } else {
             alert("Please enter names for both players.");
         }
@@ -41,12 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentPlayer === 'player1') {
                 cell.textContent = 'X';
                 gameBoardState[cellId] = 'X';
-                message.textContent = `${player2Name}, you're up!`;
+                setMessage(`${player2Name}, you're up!`);
                 currentPlayer = 'player2';
             } else {
                 cell.textContent = 'O';
                 gameBoardState[cellId] = 'O';
-                message.textContent = `${player1Name}, you're up!`;
+                setMessage(`${player1Name}, you're up!`);
                 currentPlayer = 'player1';
             }
 
@@ -54,6 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
             checkWinner();
         });
     });
+
+    // Function to Update the Message Text
+    function setMessage(text) {
+        message.textContent = text;
+        message.style.visibility = "visible"; // Ensure message is visible
+    }
 
     // Function to Check for a Winner
     function checkWinner() {
@@ -68,14 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (gameBoardState[a] && gameBoardState[a] === gameBoardState[b] && gameBoardState[a] === gameBoardState[c]) {
                 // Winner found
                 const winner = gameBoardState[a] === 'X' ? player1Name : player2Name;
-                message.textContent = `${winner}, congratulations you won!`;
+                setMessage(`${winner}, congratulations you won!`);
                 return;
             }
         }
 
         // Check for a draw (no empty cells left)
         if (!gameBoardState.includes(null)) {
-            message.textContent = "It's a draw!";
+            setMessage("It's a draw!");
         }
     }
 });
